@@ -1,6 +1,7 @@
-import { Storage } from "./interface";
+import { Storage } from "../tasks/interface";
 
 export class LocalStorage implements Storage {
+  public readonly name = LocalStorage.name;
   public set(key: string, value: object) {
     window.localStorage.setItem(key, JSON.stringify(value));
     return Promise.resolve();

@@ -13,6 +13,9 @@ export default Vue.extend({
   name: "App",
   components: {
     HelloWorld
+  },
+  created() {
+    this.$task.onVisit();
   }
 });
 </script>

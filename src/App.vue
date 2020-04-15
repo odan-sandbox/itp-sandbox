@@ -1,21 +1,54 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+    <div class="browser">
+      <span>{{ browser.name }}</span>
+      <span>{{ browser.version }}</span>
+    </div>
+    <div
+      v-for="(event, i) in events"
+      :key="`${event.name}${event.storageName}`"
+    >
+      <span>
+        {{ event.name }}
+      </span>
+      <span>
+        {{ event.storageName }}
+      </span>
+      <span>
+        {{ times[i] }}
+      </span>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
+import { format } from "date-fns";
+import Bowser from "bowser";
+
+import { Event } from "./tasks/visitor";
 
 export default Vue.extend({
   name: "App",
-  components: {
-    HelloWorld
+  data: () => {
+    return {
+      events: [] as Event[],
+      browser: undefined as Bowser.Parser.BrowserDetails | undefined
+    };
   },
-  created() {
-    this.$task.onVisit();
+  computed: {
+    times() {
+      return this.events.map(event =>
+        format(event.timeForDate, "yyyy/MM/dd HH:mm:ss")
+      );
+    }
+  },
+  created(): void {
+    this.$task.onVisit().then(async () => {
+      this.events = await this.$task.getEvents();
+    });
+    this.browser = Bowser.getParser(window.navigator.userAgent).getBrowser();
+    console.log(this.browser);
   }
 });
 </script>
@@ -28,5 +61,8 @@ export default Vue.extend({
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.browser > span {
+  margin: 4px;
 }
 </style>

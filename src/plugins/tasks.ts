@@ -1,12 +1,13 @@
 import { PluginObject } from "vue";
-import { VisitUser } from "../tasks/visitor";
+import { VisitUser, Event } from "../tasks/visitor";
 import { LocalStorage } from "../storage/localstorage";
-import { CookieStorage } from "@/storage/cookie";
+import { CookieStorage } from "../storage/cookie";
 
 export type Options = {};
 
-type TaskEvent = {
+export type TaskEvent = {
   onVisit: () => Promise<void>;
+  getEvents: () => Promise<Event[]>;
 };
 
 declare module "vue/types/vue" {
@@ -24,9 +25,16 @@ export const taskPlugin: PluginObject<Options> = {
     async function onVisit() {
       await Promise.all(visitUserTasks.map(task => task.run()));
     }
+    async function getEvents() {
+      const events = await Promise.all(
+        visitUserTasks.map(task => task.getEvents())
+      );
+      return events.flat();
+    }
 
     Vue.prototype.$task = {
-      onVisit
+      onVisit,
+      getEvents
     };
   }
 };

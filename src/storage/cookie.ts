@@ -2,7 +2,7 @@ import cookie from "js-cookie";
 import { Storage } from "../tasks/interface";
 
 export class CookieStorage implements Storage {
-  public readonly name = CookieStorage.name;
+  public readonly name = "CookieStorage";
   public set(key: string, value: object) {
     cookie.set(key, JSON.stringify(value));
     return Promise.resolve();

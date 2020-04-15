@@ -48,7 +48,6 @@ export default Vue.extend({
       this.events = await this.$task.getEvents();
     });
     this.browser = Bowser.getParser(window.navigator.userAgent).getBrowser();
-    console.log(this.browser);
   }
 });
 </script>

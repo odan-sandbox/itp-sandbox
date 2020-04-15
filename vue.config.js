@@ -1,3 +1,3 @@
 module.exports = {
-  publicPath: process.env.NODE_ENV === "production" ? "/itp-sandbox/" : "/"
+  publicPath: process.env.PUBLIC_PATH ? process.env.PUBLIC_PATH : "/"
 };
